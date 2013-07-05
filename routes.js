@@ -8,7 +8,7 @@ exports.authorize_user = function(req, res) {
     client_secret: process.env.INSTAGRAM_CLIENT_SECRET
   });
 
-  res.redirect(api.get_authorization_url(redirect_uri, { scope: ['basic', 'relationships'], state: 'a state' }));
+  res.redirect(api.get_authorization_url(redirect_uri, { scope: ['basic', 'relationships'] }));
 };
 
 exports.handleauth = function(req, res) {
@@ -17,14 +17,28 @@ exports.handleauth = function(req, res) {
       console.log(err);
       res.send("Didn't work" + err);
     } else {
-      api.user_follows(result.user.id, function(err, users, pagination, limit) {
-        console.log(pagination.next_url);
-        res.send(users);
-      });
+      console.log("Successfully logged in " + result);
+      exports.getFollows(req, res, result);
     }
   });
 };
 
 exports.index = function(req, res){
   res.render('index');
+};
+
+exports.getFollows = function(req, res, result){
+  var allFollowers = [];
+  var followers = function(err, users, pagination, limit){
+   allFollowers = allFollowers.concat(users);
+   console.log(users);
+   if(pagination && pagination.next) {
+    pagination.next(followers); // Will get second page results
+   }
+   else {
+    res.send(allFollowers);
+   }
+  };
+
+  api.user_followers(result.user.id, followers);
 };
