@@ -1,6 +1,11 @@
 var api = require('instagram-node').instagram();
+var _ = require('underscore');
 
 var redirect_uri = 'http://localhost:3000/handleauth';
+
+exports.index = function(req, res){
+  res.render('index');
+};
 
 exports.authorize_user = function(req, res) {
   api.use({
@@ -18,27 +23,38 @@ exports.handleauth = function(req, res) {
       res.send("Didn't work" + err);
     } else {
       console.log("Successfully logged in " + result);
-      exports.getFollows(req, res, result);
+      exports.getFollowData(req, res, result);
     }
   });
 };
 
-exports.index = function(req, res){
-  res.render('index');
-};
-
-exports.getFollows = function(req, res, result){
+exports.getFollowData = function(req, res, result){
   var allFollowers = [];
-  var followers = function(err, users, pagination, limit){
-   allFollowers = allFollowers.concat(users);
-   console.log(users);
-   if(pagination && pagination.next) {
-    pagination.next(followers); // Will get second page results
-   }
-   else {
-    res.send(allFollowers);
-   }
+  var allFollowing = [];
+
+  var followersHandler = function(err, users, pagination){
+    allFollowers = allFollowers.concat(users);
+    if(pagination && pagination.next) {
+      pagination.next(followersHandler);
+    }
+    else {
+      api.user_follows(result.user.id, followingHandler);
+    }
   };
 
-  api.user_followers(result.user.id, followers);
+  var followingHandler = function(err, users, pagination){
+    allFollowing = allFollowing.concat(users);
+    if(pagination && pagination.next) {
+      pagination.next(followingHandler);
+    }
+    else {
+      //Refactor out into separate stats route
+      var followingDiff = _.difference(_.pluck(allFollowing, 'username'), _.pluck(allFollowers, 'username'))
+      var followerDiff = _.difference(_.pluck(allFollowers, 'username'), _.pluck(allFollowing, 'username'))
+      res.send("# of people you follow who aren't following back: " + followingDiff.length +
+        "\n # of people who follow you and you aren't following back: " + followerDiff.length);
+    }
+  };
+
+  api.user_followers(result.user.id, followersHandler);
 };
