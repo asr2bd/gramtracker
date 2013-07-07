@@ -1,0 +1,15 @@
+.header {
+    font-family: 'Kaushan Script', cursive;
+}
+
+p {
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+.follow-text {
+    color: limegreen;
+}
+
+.follower-text {
+    color: red;
+}

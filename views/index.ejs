@@ -1,36 +1,56 @@
 <!DOCTYPE html>
-<!--[if IE 8]> 				 <html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9" lang="en" > <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>gramtracker</title>
-    <link rel="stylesheet" href="../public/css/foundation.css" />
-    <script src="../public/js/vendor/custom.modernizr.js"></script>
+    <link rel="stylesheet" href="/css/foundation.css" />
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro|Kaushan+Script' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/css/app.css" />
+    <script src="/js/vendor/custom.modernizr.js"></script>
 </head>
 <body>
 
 <div class="row">
     <div class="large-12 columns">
 
-        <h1 class="text-center">gramtracker.io</h1>
+        <h1 class="header text-center">gramtracker.io</h1>
         <div class="row">
             <div class="large-9 small-centered columns">
-                <div class="panel">
-                    <p class="text-center">Welcome to gramtracker, a lightweight web app to explore mutual follows on Instagram!</p>
-                </div>
+                <p class="text-center">Welcome to gramtracker, a lightweight web app to explore mutual follows on Instagram!</p>
             </div>
         </div>
-
     </div>
+</div>
+
+<div class="row">
+    <div class="large-6 columns">
+        <div class="panel">
+            <p class="text-center">People you <span class="follow-text">follow</span>, who aren't following back (they trippin'):</p>
+                <% noFollow.forEach(function(user, index, array){ %>
+                    <%= include user.ejs %>
+                <% }); %>
+        </div>
+    </div>
+
+    <div class="large-6 columns">
+        <div class="panel">
+            <p class="text-center">People following you, who you don't <span class="follower-text">follow</span> (spread the love!):</p>
+            <% noFollowing.forEach(function(user, index, array){%>
+            <%= include user.ejs %>
+            <% }); %>
+        </div>
+    </div>
+</div>
 <script>
     document.write('<script src=' +
             ('__proto__' in {} ? 'js/vendor/zepto' : 'js/vendor/jquery') +
             '.js><\/script>')
 </script>
 
-<script src="../public/js/foundation.min.js"></script>
+<script src="/js/foundation.min.js"></script>
 <!--
 
 <script src="js/foundation/foundation.js"></script>

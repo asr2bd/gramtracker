@@ -51,8 +51,9 @@ exports.getFollowData = function(req, res, result){
       //Refactor out into separate stats route
       var followingDiff = _.difference(_.pluck(allFollowing, 'username'), _.pluck(allFollowers, 'username'))
       var followerDiff = _.difference(_.pluck(allFollowers, 'username'), _.pluck(allFollowing, 'username'))
-      res.send("# of people you follow who aren't following back: " + followingDiff.length +
-        "\n # of people who follow you and you aren't following back: " + followerDiff.length);
+//      res.send("# of people you follow who aren't following back: " + followingDiff.length +
+//        "\n # of people who follow you and you aren't following back: " + followerDiff.length);
+      res.render('index', {noFollow: followingDiff, noFollowing: followerDiff});
     }
   };
 
