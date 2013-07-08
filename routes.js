@@ -51,11 +51,22 @@ exports.getFollowData = function(req, res, result){
       //Refactor out into separate stats route
       var followingDiff = _.difference(_.pluck(allFollowing, 'username'), _.pluck(allFollowers, 'username'))
       var followerDiff = _.difference(_.pluck(allFollowers, 'username'), _.pluck(allFollowing, 'username'))
-//      res.send("# of people you follow who aren't following back: " + followingDiff.length +
-//        "\n # of people who follow you and you aren't following back: " + followerDiff.length);
-      res.render('index', {noFollow: followingDiff, noFollowing: followerDiff});
+
+      var hydratedFollowingDiff = _.filter(allFollowing, function(user){ return _.contains(followingDiff, user.username); });
+      var hydratedFollowerDiff = _.filter(allFollowers, function(user){ return _.contains(followerDiff, user.username); });
+
+      console.log(JSON.stringify(hydratedFollowerDiff));
+       exports.set_relationship('35276099', 'follow');
+      res.render('index', {noFollow: hydratedFollowingDiff, noFollowing: hydratedFollowerDiff});
     }
   };
 
   api.user_followers(result.user.id, followersHandler);
 };
+
+exports.set_relationship = function(id, new_relation){
+  api.set_user_relationship(id, new_relation, function(err, result, limit) {
+    console.log(result);
+    //res.send(result);
+  });
+}
