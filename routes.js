@@ -56,7 +56,7 @@ exports.getFollowData = function(req, res, result){
       var hydratedFollowerDiff = _.filter(allFollowers, function(user){ return _.contains(followerDiff, user.username); });
 
       console.log(JSON.stringify(hydratedFollowerDiff));
-       exports.set_relationship('35276099', 'follow');
+      //exports.set_relationship('35276099', 'follow');
       res.render('index', {noFollow: hydratedFollowingDiff, noFollowing: hydratedFollowerDiff});
     }
   };
@@ -64,9 +64,12 @@ exports.getFollowData = function(req, res, result){
   api.user_followers(result.user.id, followersHandler);
 };
 
-exports.set_relationship = function(id, new_relation){
-  api.set_user_relationship(id, new_relation, function(err, result, limit) {
+exports.set_relationship = function(req, res){
+  console.log('Making  arequest with id: ' + req.query.id + 'and action: ' + req.query.relation);
+  api.set_user_relationship(req.query.id, req.query.relation, function(err, result, limit) {
+    if(err)
+      console.log('Error: ' + err);
     console.log(result);
-    //res.send(result);
+    res.send(result);
   });
 }
