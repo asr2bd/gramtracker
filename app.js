@@ -28,7 +28,7 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.get('/', routes.index);
+app.get('/', routes.home);
 app.get('/handleauth', routes.handleauth);
 app.get('/authorize_user', routes.authorize_user);
 app.get('/set_relationship', routes.set_relationship);

@@ -1,4 +1,10 @@
 $(document).ready(function(){
+  if ($(window).width() <= 320) {
+    $('.button').removeClass('small');
+    $('.button').addClass('tiny');
+  }
+
+
   function updateButton(button, status) {
     if(status === 'follows') {
       button.addClass('success');

@@ -36,3 +36,25 @@ a.follow {
     float: right;
     margin-top: 10px;
 }
+
+body {
+    background-image:url('/img/background.png');
+    background-repeat:repeat;
+}
+
+
+@media only screen and (device-width: 320px) {
+    .name {
+        display: inline-block;
+        font-size: .5em;
+    }
+
+    .profile-photo {
+        width: 30px;
+        height: 30px;
+    }
+
+    .user-name {
+        font-size: .3em;
+    }
+}
