@@ -1,7 +1,7 @@
 var api = require('instagram-node').instagram();
 var _ = require('underscore');
 
-var redirect_uri = 'http://localhost:3000/handleauth';
+var redirect_uri = 'http://fathomless-wave-9392.herokuapp.com/handleauth';
 
 exports.index = function(req, res){
   res.render('index');
