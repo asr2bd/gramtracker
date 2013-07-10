@@ -23,14 +23,12 @@ exports.handleauth = function(req, res) {
       res.send("Didn't work" + err);
     } else {
       console.log("Successfully logged in " + result);
-      console.log(req.cookies);
-      //res.cookie('instagram_id', result.user.id, {maxAge: 60 * 1000 * 5}).redirect('stats');
-      exports.getFollowData(req, res, result);
+      res.cookie('instagram_id', result.user.id, {maxAge: 60 * 1000 * 5}).redirect('stats');
     }
   });
 };
 
-exports.getFollowData = function(req, res, result){
+exports.getFollowData = function(req, res, id){
   var allFollowers = [];
   var allFollowing = [];
 
@@ -40,7 +38,7 @@ exports.getFollowData = function(req, res, result){
       pagination.next(followersHandler);
     }
     else {
-      api.user_follows(result.user.id, followingHandler);
+      api.user_follows(id, followingHandler);
     }
   };
 
@@ -62,7 +60,7 @@ exports.getFollowData = function(req, res, result){
     }
   };
 
-  api.user_followers(result.user.id, followersHandler);
+  api.user_followers(id, followersHandler);
 };
 
 exports.set_relationship = function(req, res){
@@ -76,5 +74,10 @@ exports.set_relationship = function(req, res){
 }
 
 exports.stats = function(req, res){
-  res.send('cookie is ' + JSON.stringify(req.signedCookies) + JSON.stringify(req.cookies));
+  if(req.cookies.instagram_id){
+   var id = req.cookies.instagram_id;
+   exports.getFollowData(req, res, id);
+  } else {
+    res.redirect('/');
+  }
 }
