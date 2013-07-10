@@ -19,6 +19,8 @@ app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(app.router);
+app.use(express.cookieParser());
+app.use(express.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // development only
@@ -30,6 +32,7 @@ app.get('/', routes.index);
 app.get('/handleauth', routes.handleauth);
 app.get('/authorize_user', routes.authorize_user);
 app.get('/set_relationship', routes.set_relationship);
+app.get('/stats', routes.stats);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

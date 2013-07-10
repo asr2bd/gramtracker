@@ -23,6 +23,8 @@ exports.handleauth = function(req, res) {
       res.send("Didn't work" + err);
     } else {
       console.log("Successfully logged in " + result);
+      console.log(req.cookies);
+      //res.cookie('instagram_id', result.user.id, {maxAge: 60 * 1000 * 5}).redirect('stats');
       exports.getFollowData(req, res, result);
     }
   });
@@ -56,7 +58,6 @@ exports.getFollowData = function(req, res, result){
       var hydratedFollowerDiff = _.filter(allFollowers, function(user){ return _.contains(followerDiff, user.username); });
 
       console.log(JSON.stringify(hydratedFollowerDiff));
-      //exports.set_relationship('35276099', 'follow');
       res.render('index', {noFollow: hydratedFollowingDiff, noFollowing: hydratedFollowerDiff});
     }
   };
@@ -72,4 +73,8 @@ exports.set_relationship = function(req, res){
     console.log(result);
     res.send(result);
   });
+}
+
+exports.stats = function(req, res){
+  res.send('cookie is ' + JSON.stringify(req.signedCookies) + JSON.stringify(req.cookies));
 }
