@@ -48,14 +48,11 @@ exports.getFollowData = function(req, res, id){
       pagination.next(followingHandler);
     }
     else {
-      //Refactor out into separate stats route
       var followingDiff = _.difference(_.pluck(allFollowing, 'username'), _.pluck(allFollowers, 'username'))
       var followerDiff = _.difference(_.pluck(allFollowers, 'username'), _.pluck(allFollowing, 'username'))
 
       var hydratedFollowingDiff = _.filter(allFollowing, function(user){ return _.contains(followingDiff, user.username); });
       var hydratedFollowerDiff = _.filter(allFollowers, function(user){ return _.contains(followerDiff, user.username); });
-
-      console.log(JSON.stringify(hydratedFollowerDiff));
       res.render('index', {noFollow: hydratedFollowingDiff, noFollowing: hydratedFollowerDiff});
     }
   };
@@ -64,11 +61,9 @@ exports.getFollowData = function(req, res, id){
 };
 
 exports.set_relationship = function(req, res){
-  console.log('Making  arequest with id: ' + req.query.id + 'and action: ' + req.query.relation);
   api.set_user_relationship(req.query.id, req.query.relation, function(err, result, limit) {
     if(err)
       console.log('Error: ' + err);
-    console.log(result);
     res.send(result);
   });
 }
